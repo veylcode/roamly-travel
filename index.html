@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roamly — путешествия, собранные под вас</title>
+  <meta name="description" content="Roamly — сервис поиска путешествий, изучения направлений и планирования поездок.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="account.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <a href="#top" class="logo">roamly<span class="logo__dot"></span></a>
+    <nav class="nav" id="nav">
+      <a href="#destinations">Направления</a>
+      <a href="#planner">Планировщик</a>
+      <a href="#deals">Горящие туры</a>
+      <a href="#trips">Мои поездки <span class="nav__count" id="tripsCount">0</span></a>
+    </nav>
+    <button class="traveler-btn" id="travelerBtn" aria-label="Паспорт путешественника">
+      <span data-when="out">Войти</span>
+      <span class="traveler-btn__avatar" data-when="in" data-auth-initials></span>
+    </button>
+    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero__slides" id="heroSlides"></div>
+      <div class="hero__shade"></div>
+
+      <div class="hero__content">
+        <p class="hero__eyebrow">Куда отправимся?</p>
+        <h1 class="hero__title">
+          <span class="hero__static">Мир ближе,</span>
+          <span class="hero__dynamic" id="heroPlace">Санторини</span>
+        </h1>
+        <div class="hero__meta">
+          <span id="heroCountry">Греция</span>
+          <span class="hero__counter"><b id="heroIndex">1</b> / <span id="heroTotal">5</span></span>
+        </div>
+        <div class="hero__bars" id="heroBars"></div>
+      </div>
+
+      <form class="finder" id="finder">
+        <label class="finder__field">
+          <span>Куда</span>
+          <input type="text" name="where" list="placesList" placeholder="Любое направление">
+          <datalist id="placesList"></datalist>
+        </label>
+        <label class="finder__field">
+          <span>Когда</span>
+          <select name="month" id="finderMonth"></select>
+        </label>
+        <label class="finder__field">
+          <span>Настроение</span>
+          <select name="mood">
+            <option value="all">Любое</option>
+            <option value="sea">Море</option>
+            <option value="mountains">Горы</option>
+            <option value="city">Города</option>
+            <option value="exotic">Экзотика</option>
+          </select>
+        </label>
+        <button class="finder__submit" type="submit">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span>Найти</span>
+        </button>
+      </form>
+    </section>
+
+    <section class="destinations" id="destinations">
+      <div class="block-head">
+        <h2 class="block-title reveal">Направления <span class="sticker sticker--sun">сезона</span></h2>
+        <div class="carousel-nav reveal">
+          <button class="round-btn" id="prevDest" aria-label="Назад">←</button>
+          <button class="round-btn" id="nextDest" aria-label="Вперёд">→</button>
+        </div>
+      </div>
+
+      <div class="filters reveal">
+        <div class="moods" id="moods">
+          <button class="mood is-active" data-mood="all">Все</button>
+          <button class="mood" data-mood="sea">🌊 Море</button>
+          <button class="mood" data-mood="mountains">⛰ Горы</button>
+          <button class="mood" data-mood="city">🏙 Города</button>
+          <button class="mood" data-mood="exotic">🌴 Экзотика</button>
+        </div>
+        <div class="months" id="months"></div>
+      </div>
+
+      <div class="dest-track" id="destTrack"></div>
+      <p class="dest-empty" id="destEmpty" hidden>В этом месяце по выбранному настроению ничего не подобрали — попробуйте другой месяц.</p>
+    </section>
+
+    <section class="how">
+      <h2 class="block-title reveal">Как это <span class="sticker sticker--coral">работает</span></h2>
+      <div class="how__grid">
+        <article class="how__card reveal">
+          <span class="how__num">1</span>
+          <h3>Выбираете настроение</h3>
+          <p>Море, горы или шумный мегаполис — фильтры подскажут, где сейчас лучший сезон.</p>
+        </article>
+        <article class="how__card reveal">
+          <span class="how__num">2</span>
+          <h3>Собираете маршрут</h3>
+          <p>Планировщик сам распределит активности по дням и посчитает бюджет поездки.</p>
+        </article>
+        <article class="how__card reveal">
+          <span class="how__num">3</span>
+          <h3>Отправляетесь в путь</h3>
+          <p>Сохраняйте поездки, делитесь ими с друзьями и следите за горящими предложениями.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="planner" id="planner">
+      <div class="planner__head">
+        <h2 class="block-title block-title--light reveal">Планировщик <span class="sticker sticker--sea">поездки</span></h2>
+        <p class="reveal">Настройте параметры — маршрут и бюджет пересчитываются на лету.</p>
+      </div>
+
+      <div class="planner__grid">
+        <div class="planner__controls reveal">
+          <label class="control">
+            <span>Направление</span>
+            <select id="planDest"></select>
+          </label>
+
+          <label class="control">
+            <span class="control__row">Длительность <output id="daysOut">7 дней</output></span>
+            <input type="range" id="planDays" min="3" max="14" value="7">
+          </label>
+
+          <div class="control">
+            <span>Формат</span>
+            <div class="segmented" id="planStyle">
+              <button class="is-active" data-style="budget">Эконом</button>
+              <button data-style="comfort">Комфорт</button>
+              <button data-style="luxury">Люкс</button>
+            </div>
+          </div>
+
+          <div class="control">
+            <span>Путешественники</span>
+            <div class="counter">
+              <button data-travelers="-1" aria-label="Меньше">−</button>
+              <output id="travelersOut">2</output>
+              <button data-travelers="1" aria-label="Больше">+</button>
+            </div>
+          </div>
+
+          <div class="budget">
+            <div class="budget__total">
+              <span>Ориентировочный бюджет</span>
+              <b id="budgetTotal">0 ₽</b>
+              <small id="budgetPer"></small>
+            </div>
+            <ul class="budget__bars" id="budgetBars"></ul>
+          </div>
+
+          <button class="btn btn--sun" id="saveTrip">Сохранить поездку</button>
+        </div>
+
+        <div class="itinerary reveal">
+          <div class="itinerary__cover" id="planCover">
+            <img src="" alt="" id="planImage">
+            <div>
+              <b id="planName"></b>
+              <span id="planMeta"></span>
+            </div>
+          </div>
+          <ol class="itinerary__days" id="itinerary"></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="deals" id="deals">
+      <div class="block-head">
+        <h2 class="block-title reveal">Горящие <span class="sticker sticker--coral">туры</span></h2>
+        <p class="deals__timer reveal">Предложения обновятся через <b id="dealsTimer">—</b></p>
+      </div>
+      <div class="deals__grid" id="dealsGrid"></div>
+    </section>
+
+    <section class="trips" id="trips">
+      <h2 class="block-title reveal">Мои <span class="sticker sticker--sea">поездки</span></h2>
+      <div class="trips__list" id="tripsList"></div>
+    </section>
+
+    <section class="subscribe">
+      <div class="subscribe__card reveal">
+        <h2>Получайте лучшие маршруты первыми</h2>
+        <form class="subscribe__form" id="subscribeForm" novalidate>
+          <input type="email" name="email" placeholder="you@email.com" required>
+          <button class="btn btn--sun" type="submit">Хочу</button>
+        </form>
+        <p class="subscribe__msg" id="subscribeMsg"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="logo">roamly<span class="logo__dot"></span></span>
+    <p>Концепт туристического сервиса для портфолио. Цены и предложения демонстрационные, бронирование не производится.</p>
+    <span>© 2026</span>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="r-modal" id="authModal" aria-hidden="true">
+    <div class="r-modal__backdrop" data-close-auth></div>
+    <div class="r-modal__panel r-auth" data-auth-root data-view="login" role="dialog" aria-modal="true" aria-label="Вход в Roamly">
+      <span class="r-auth__float r-auth__float--plane" aria-hidden="true">✈</span>
+      <span class="r-auth__float r-auth__float--palm" aria-hidden="true">🌴</span>
+      <span class="r-auth__float r-auth__float--peak" aria-hidden="true">⛰</span>
+      <button class="r-modal__close" data-close-auth aria-label="Закрыть">✕</button>
+
+      <h2 class="r-auth__title">
+        <span data-pane="login">С возвращением, <span class="sticker sticker--sun">путник</span></span>
+        <span data-pane="register" hidden>Получите <span class="sticker sticker--coral">паспорт</span></span>
+        <span data-pane="reset" hidden>Потеряли <span class="sticker sticker--sea">ключи?</span></span>
+      </h2>
+
+      <div class="r-auth__tabs">
+        <button data-auth-switch="login">Вход</button>
+        <button data-auth-switch="register">Регистрация</button>
+      </div>
+
+      <form class="r-form" data-auth-form="login" data-pane="login">
+        <label class="r-field" data-field>
+          <span>E-mail</span>
+          <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+          <small data-field-error></small>
+        </label>
+        <label class="r-field" data-field>
+          <span>Пароль</span>
+          <input type="password" name="password" placeholder="Ваш пароль" autocomplete="current-password">
+          <button class="r-field__eye" data-toggle-password aria-label="Показать пароль">👁</button>
+          <small data-field-error></small>
+        </label>
+        <div class="r-form__row">
+          <label class="r-check"><input type="checkbox" name="remember" checked><i></i>Запомнить</label>
+          <button class="r-link" data-auth-switch="reset">Забыли пароль?</button>
+        </div>
+        <p class="r-form__error" data-form-error hidden></p>
+        <button class="btn btn--sun btn--wide" type="submit">Поехали!</button>
+        <button class="r-demo" data-auth-demo>Или демо-вход в один клик →</button>
+      </form>
+
+      <form class="r-form" data-auth-form="register" data-pane="register" hidden>
+        <label class="r-field" data-field>
+          <span>Как вас зовут?</span>
+          <input type="text" name="name" placeholder="Имя" autocomplete="name">
+          <small data-field-error></small>
+        </label>
+        <label class="r-field" data-field>
+          <span>E-mail</span>
+          <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+          <small data-field-error></small>
+        </label>
+        <div class="r-form__pair">
+          <label class="r-field" data-field>
+            <span>Пароль</span>
+            <input type="password" name="password" placeholder="8+ символов" autocomplete="new-password">
+            <button class="r-field__eye" data-toggle-password aria-label="Показать пароль">👁</button>
+            <small data-field-error></small>
+          </label>
+          <label class="r-field" data-field>
+            <span>Ещё раз</span>
+            <input type="password" name="confirm" placeholder="Повторите" autocomplete="new-password">
+            <small data-field-error></small>
+          </label>
+        </div>
+        <div class="r-strength" data-strength><i></i><i></i><i></i><i></i><span data-strength-label></span></div>
+        <label class="r-check" data-field>
+          <input type="checkbox" name="agree"><i></i>Согласен с условиями сервиса
+          <small data-field-error></small>
+        </label>
+        <p class="r-form__error" data-form-error hidden></p>
+        <button class="btn btn--sun btn--wide" type="submit">Создать паспорт</button>
+      </form>
+
+      <form class="r-form" data-auth-form="reset" data-pane="reset" hidden>
+        <p class="r-form__lead">Пришлём ссылку для нового пароля — проверьте почту.</p>
+        <label class="r-field" data-field>
+          <span>E-mail</span>
+          <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+          <small data-field-error></small>
+        </label>
+        <p class="r-form__success" data-form-success hidden></p>
+        <button class="btn btn--sun btn--wide" type="submit">Отправить</button>
+        <button class="r-link" data-auth-switch="login">← Назад</button>
+      </form>
+
+      <p class="r-auth__note">Демо: аккаунт и поездки хранятся только в этом браузере.</p>
+    </div>
+  </div>
+
+  <div class="r-modal" id="passportModal" aria-hidden="true">
+    <div class="r-modal__backdrop" data-close-passport></div>
+    <div class="r-modal__panel passport-wrap" role="dialog" aria-modal="true" aria-label="Паспорт путешественника">
+      <button class="r-modal__close" data-close-passport aria-label="Закрыть">✕</button>
+
+      <div class="passport">
+        <div class="passport__top">
+          <span>ROAMLY · TRAVEL PASSPORT</span>
+          <span id="passportNumber"></span>
+        </div>
+        <div class="passport__body">
+          <span class="passport__photo" data-auth-initials></span>
+          <dl class="passport__data">
+            <div><dt>Путешественник</dt><dd data-auth-name></dd></div>
+            <div><dt>В пути с</dt><dd data-auth-since></dd></div>
+            <div><dt>Статус</dt><dd id="passportLevel"></dd></div>
+          </dl>
+        </div>
+        <div class="passport__stamps" id="stamps"></div>
+        <div class="passport__mrz" id="passportMrz"></div>
+      </div>
+
+      <div class="passport-stats">
+        <div><b id="statTrips">0</b><span>поездок</span></div>
+        <div><b id="statCountries">0</b><span>стран</span></div>
+        <div><b id="statDays">0</b><span>дней в пути</span></div>
+      </div>
+
+      <div class="r-auth__tabs r-auth__tabs--wide" id="passportTabs">
+        <button class="is-active" data-ptab="trips">Поездки</button>
+        <button data-ptab="profile">Профиль</button>
+        <button data-ptab="security">Пароль</button>
+      </div>
+
+      <div data-ppanel="trips">
+        <div class="passport-trips" id="passportTrips"></div>
+      </div>
+
+      <form class="r-form" data-auth-form="profile" data-ppanel="profile" hidden>
+        <label class="r-field" data-field>
+          <span>Имя</span>
+          <input type="text" name="name">
+          <small data-field-error></small>
+        </label>
+        <label class="r-field" data-field>
+          <span>E-mail</span>
+          <input type="email" name="email" readonly>
+        </label>
+        <label class="r-field" data-field>
+          <span>Телефон</span>
+          <input type="tel" name="phone" placeholder="+7 900 000-00-00">
+          <small data-field-error></small>
+        </label>
+        <p class="r-form__success" data-form-success hidden></p>
+        <button class="btn btn--sun" type="submit">Сохранить</button>
+      </form>
+
+      <form class="r-form" data-auth-form="password" data-ppanel="security" hidden>
+        <label class="r-field" data-field>
+          <span>Текущий пароль</span>
+          <input type="password" name="current" autocomplete="current-password">
+          <small data-field-error></small>
+        </label>
+        <div class="r-form__pair">
+          <label class="r-field" data-field>
+            <span>Новый пароль</span>
+            <input type="password" name="password" autocomplete="new-password">
+            <button class="r-field__eye" data-toggle-password aria-label="Показать пароль">👁</button>
+            <small data-field-error></small>
+          </label>
+          <label class="r-field" data-field>
+            <span>Ещё раз</span>
+            <input type="password" name="confirm" autocomplete="new-password">
+            <small data-field-error></small>
+          </label>
+        </div>
+        <div class="r-strength" data-strength><i></i><i></i><i></i><i></i><span data-strength-label></span></div>
+        <p class="r-form__error" data-form-error hidden></p>
+        <p class="r-form__success" data-form-success hidden></p>
+        <button class="btn btn--sun" type="submit">Обновить пароль</button>
+      </form>
+
+      <button class="r-logout" data-auth-logout>Выйти из аккаунта</button>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>
